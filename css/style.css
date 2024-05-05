@@ -1,24 +1,91 @@
-body{
+@import url('https://fonts.googleapis.com/css?family=VT323');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     background-image: url('../images/snakeWallpaper.jpg');
     background-repeat: no-repeat;
     background-position: center;
-    background-attachment: fixed;
-    background-size: cover;
+    background-size: auto;
 }
 
-#gameContainer{
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 8vh;
+    background-color: #1f104f;
+    font-family: 'VT323', monospace;
+    width: 100%;
+}
+
+#links {
+    display: flex;
+    justify-content: space-around;
+    width: 40%;
+    text-transform: uppercase;
+}
+
+#links li {
+    list-style: none;
+    color: #8f00ff;
+}
+
+#links a {
+    text-decoration: none;
+    letter-spacing: 3px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #0044d0;
+}
+
+#links a:hover {
+    text-shadow: 0 0 5px #10ecf9;
+}
+
+#navIcon {
+    float: left;
+    width: 50px;
+    height: 50px;
+    margin-top: 4px;
+}
+
+#mainPage {
+    text-decoration: none;
+    font-size: 60px;
+    letter-spacing: 5px;
+    float: left;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #7A0086;
+}
+
+#mainPage:hover {
+    text-shadow: 0 0 5px #f548ff;
+}
+
+#mainPage:visited {
+    color: #7A0086;
+}
+
+#mainPage:active {
+    color: #7A0086;
+}
+
+#gameContainer {
     text-align: center;
 }
 
-#gameBoard{
-    border: 3px solid;
+#gameBoard {
+    display: inline-block;
+    margin-top: 52px;
 }
 
-#scoreText{
-    font-size: 100px;
-}
-
-#resetBtn{
+#resetBtn {
     font-size: 22px;
     width: 100px;
     height: 50px;
