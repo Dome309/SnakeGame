@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SnakeGame</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="images/websiteIcon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+    <nav>
+        <div>
+            <img src="images/gameIcon.png" alt="snake" id="navIcon">
+            <a href="index.html" id="mainPage">Snake</a>
+        </div>
+
+        <ul id="links">
+            <li><a href="#">Leadboard</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Development Team</a></li>
+            <li><a href="#">Future projects</a></li>
+        </ul>
+    </nav>
+
     <div id="gameContainer">
-        <canvas id="gameBoard" width="500" height="500"></canvas>
-        <div id="scoreText">0</div>
+        <canvas id="gameBoard" width="608" height="608"></canvas>
+        <div></div>
         <button id="resetBtn">Reset</button>
     </div>
-    <script src="index.js"></script>
+    <script src="js/index.js"></script>
 </body>
+
 </html>
