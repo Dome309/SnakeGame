@@ -29,6 +29,7 @@ var foodSpawn = spawnFood();
 
 document.addEventListener("keydown", changeDirection);
 
+//method for changing direction of the snake based on keyboard arrows
 function changeDirection(event) {
     var key = event.keyCode;
     if (key == 37 && direction != "RIGHT") {
@@ -51,7 +52,7 @@ function collision(head, array) {
     return false;
 }
 
-function drawSnakePart(x, y, isHead = false) {
+function drawSnakeBody(x, y, isHead = false) {
     ctx.fillStyle = isHead ? SNAKE_HEAD_COLOR : SNAKE_COLOR;
     ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
     ctx.strokeStyle = SNAKE_HEAD_COLOR;
@@ -64,11 +65,11 @@ function drawFood(x, y, img) {
 
 function spawnFood() {
     var foodPosition;
-    
-        foodPosition = {
-            x: Math.floor(Math.random() * 17 + 1) * CELL_SIZE,
-            y: Math.floor(Math.random() * 15 + 3) * CELL_SIZE
-        };
+
+    foodPosition = {
+        x: Math.floor(Math.random() * 17 + 1) * CELL_SIZE,
+        y: Math.floor(Math.random() * 15 + 3) * CELL_SIZE
+    };
 
     return foodPosition;
 }
@@ -86,7 +87,7 @@ function draw() {
     ctx.drawImage(backGround, 0, 0);
 
     for (var i = 0; i < snake.length; i++) {
-        drawSnakePart(snake[i].x, snake[i].y, i === 0);
+        drawSnakeBody(snake[i].x, snake[i].y, i === 0);
     }
 
     drawFood(foodSpawn.x, foodSpawn.y, blueFood);
