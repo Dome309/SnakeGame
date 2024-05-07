@@ -1,163 +1,142 @@
 const gameBoard = document.querySelector("#gameBoard");
 const ctx = gameBoard.getContext("2d");
-const scoreText = document.querySelector("#scoreText");
-const resetBtn = document.querySelector("#resetBtn");
-const gameWidth = gameBoard.width;
-const gameHeight = gameBoard.height;
-const boardBackground = "white";
-const snakeColor = "lightgreen";
-const snakeBorder = "black";
-const foodColor = "red";
-const unitSize = 25;
-let running = false;
-let xVelocity = unitSize;
-let yVelocity = 0;
-let foodX;
-let foodY;
-let score = 0;
-let snake = [
-    {x:unitSize * 4, y:0},
-    {x:unitSize * 3, y:0},
-    {x:unitSize * 2, y:0},
-    {x:unitSize, y:0},
-    {x:0, y:0}
-];
+const CELL_SIZE = 32;
+const BG_COLOR = "#C000D3";
+const SNAKE_COLOR = "#0CC8FF";
+const SNAKE_HEAD_COLOR = "#4200FF";
+const FOOD_COLOR = "#FFFFFF";
+const TEXT_COLOR = "#FFFFFF";
+const TEXT_COLOR_GAME_OVER = "#7A0086";
+const FONT_STYLE_SCORE = "40px VT323";
+const FONT_STYLE_GAME_OVER = "100px VT323";
+const MIN_X = CELL_SIZE;
+const MAX_X = 17 * CELL_SIZE;
+const MIN_Y = 3 * CELL_SIZE;
+const MAX_Y = 17 * CELL_SIZE;
+const backGround = new Image();
+backGround.src = "images/gameBoard.jpg";
+const blueFood = new Image();
+blueFood.src = "images/blueFood.png";
+const purpleFood = new Image();
+purpleFood.src = "images/purpleFood.png";
 
-window.addEventListener("keydown", changeDirection);
-resetBtn.addEventListener("click", resetGame);
+var score = 0;
+var direction;
+var snake = [];
+snake[0] = {
+    x: 9 * CELL_SIZE,
+    y: 10 * CELL_SIZE
+};
+var foodSpawn = spawnFood();
 
-gameStart();
+document.addEventListener("keydown", changeDirection);
 
-function gameStart(){
-    running = true;
-    scoreText.textContent = score;
-    createFood();
-    drawFood();
-    nextTick();
-};
-function nextTick(){
-    if(running){
-        setTimeout(()=>{
-            clearBoard();
-            drawFood();
-            moveSnake();
-            drawSnake();
-            checkGameOver();
-            nextTick();
-        }, 75);
+function changeDirection(event) {
+    var key = event.keyCode;
+    if (key == 37 && direction != "RIGHT") {
+        direction = "LEFT";
+    } else if (key == 38 && direction != "DOWN") {
+        direction = "UP";
+    } else if (key == 39 && direction != "LEFT") {
+        direction = "RIGHT";
+    } else if (key == 40 && direction != "UP") {
+        direction = "DOWN";
     }
-    else{
-        displayGameOver();
-    }
-};
-function clearBoard(){
-    ctx.fillStyle = boardBackground;
-    ctx.fillRect(0, 0, gameWidth, gameHeight);
-};
-function createFood(){
-    function randomFood(min, max){
-        const randNum = Math.round((Math.random() * (max - min) + min) / unitSize) * unitSize;
-        return randNum;
-    }
-    foodX = randomFood(0, gameWidth - unitSize);
-    foodY = randomFood(0, gameWidth - unitSize);
-};
-function drawFood(){
-    ctx.fillStyle = foodColor;
-    ctx.fillRect(foodX, foodY, unitSize, unitSize);
-};
-function moveSnake(){
-    const head = {x: snake[0].x + xVelocity,
-                  y: snake[0].y + yVelocity};
-    
-    snake.unshift(head);
-    if(snake[0].x == foodX && snake[0].y == foodY){
-        score+=1;
-        scoreText.textContent = score;
-        createFood();
-    }
-    else{
-        snake.pop();
-    }
-};
-function drawSnake(){
-    ctx.fillStyle = snakeColor;
-    ctx.strokeStyle = snakeBorder;
-    snake.forEach(snakePart => {
-        ctx.fillRect(snakePart.x, snakePart.y, unitSize, unitSize);
-        ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
-    })
-};
-function changeDirection(event){
-    const keyPressed = event.keyCode;
-    const LEFT = 37;
-    const UP = 38;
-    const RIGHT = 39;
-    const DOWN = 40;
+}
 
-    const goingUp = (yVelocity == -unitSize);
-    const goingDown = (yVelocity == unitSize);
-    const goingRight = (xVelocity == unitSize);
-    const goingLeft = (xVelocity == -unitSize);
-
-    switch(true){
-        case(keyPressed == LEFT && !goingRight):
-            xVelocity = -unitSize;
-            yVelocity = 0;
-            break;
-        case(keyPressed == UP && !goingDown):
-            xVelocity = 0;
-            yVelocity = -unitSize;
-            break;
-        case(keyPressed == RIGHT && !goingLeft):
-            xVelocity = unitSize;
-            yVelocity = 0;
-            break;
-        case(keyPressed == DOWN && !goingUp):
-            xVelocity = 0;
-            yVelocity = unitSize;
-            break;
-    }
-};
-function checkGameOver(){
-    switch(true){
-        case(snake[0].x < 0):
-            running = false;
-            break;
-        case(snake[0].x >= gameWidth):
-            running = false;
-            break;
-        case(snake[0].y < 0):
-            running = false;
-            break;
-        case(snake[0].y >= gameHeight):
-            running = false;
-            break;
-    }
-    for(let i = 1; i < snake.length; i+=1){
-        if(snake[i].x == snake[0].x && snake[i].y == snake[0].y){
-            running = false;
+function collision(head, array) {
+    for (var i = 0; i < array.length; i++) {
+        if (head.x == array[i].x && head.y == array[i].y) {
+            return true;
         }
     }
-};
+    return false;
+}
 
-function displayGameOver(){
-    ctx.font = "50px Arial";
-    ctx.fillStyle = "black";
-    ctx.textAlign = "center";
-    ctx.fillText("GAME OVER", gameWidth / 2, gameHeight / 2);
-    running = false;
-};
-function resetGame(){
-    score = 0;
-    xVelocity = unitSize;
-    yVelocity = 0;
-    snake = [
-        {x:unitSize * 4, y:0},
-        {x:unitSize * 3, y:0},
-        {x:unitSize * 2, y:0},
-        {x:unitSize, y:0},
-        {x:0, y:0}
-    ];
-    gameStart();
-};
+function drawSnakePart(x, y, isHead = false) {
+    ctx.fillStyle = isHead ? SNAKE_HEAD_COLOR : SNAKE_COLOR;
+    ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+    ctx.strokeStyle = SNAKE_HEAD_COLOR;
+    ctx.strokeRect(x, y, CELL_SIZE, CELL_SIZE);
+}
+
+function drawFood(x, y, img) {
+    ctx.drawImage(img, x, y);
+}
+
+function spawnFood() {
+    var foodPosition;
+    
+        foodPosition = {
+            x: Math.floor(Math.random() * 17 + 1) * CELL_SIZE,
+            y: Math.floor(Math.random() * 15 + 3) * CELL_SIZE
+        };
+
+    return foodPosition;
+}
+
+function gameOver() {
+    ctx.fillStyle = TEXT_COLOR_GAME_OVER;
+    ctx.font = FONT_STYLE_GAME_OVER;
+    var textWidth = ctx.measureText("Game Over").width;
+    var textX = (gameBoard.width - textWidth) / 2;
+    var textY = gameBoard.height / 2;
+    ctx.fillText("Game Over", textX, textY);
+}
+
+function draw() {
+    ctx.drawImage(backGround, 0, 0);
+
+    for (var i = 0; i < snake.length; i++) {
+        drawSnakePart(snake[i].x, snake[i].y, i === 0);
+    }
+
+    drawFood(foodSpawn.x, foodSpawn.y, blueFood);
+    if (score % 5 == 0) {
+        drawFood(foodSpawn.x, foodSpawn.y, purpleFood);
+    }
+
+    var snakeX = snake[0].x;
+    var snakeY = snake[0].y;
+
+    var directionVector = getDirectionVector(direction);
+    snakeX += directionVector.x;
+    snakeY += directionVector.y;
+
+    if (snakeX == foodSpawn.x && snakeY == foodSpawn.y) {
+        score++;
+        foodSpawn = spawnFood();
+    } else {
+        snake.pop();
+    }
+
+    var newHead = { x: snakeX, y: snakeY }
+
+    if (snakeX < MIN_X || snakeX > MAX_X || snakeY < MIN_Y || snakeY > MAX_Y || collision(newHead, snake)) {
+        clearInterval(game);
+        gameOver();
+        return;
+    }
+
+    snake.unshift(newHead);
+    ctx.fillStyle = TEXT_COLOR;
+    ctx.font = FONT_STYLE_SCORE;
+    ctx.fillText(score, 5.3 * CELL_SIZE, 1.6 * CELL_SIZE);
+}
+
+function getDirectionVector(dir) {
+    switch (dir) {
+        case "LEFT":
+            return { x: -CELL_SIZE, y: 0 };
+        case "UP":
+            return { x: 0, y: -CELL_SIZE };
+        case "RIGHT":
+            return { x: CELL_SIZE, y: 0 };
+        case "DOWN":
+            return { x: 0, y: CELL_SIZE };
+        default:
+            return { x: 0, y: 0 };
+    }
+}
+
+var game = setInterval(draw, 100);
