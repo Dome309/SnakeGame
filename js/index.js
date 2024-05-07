@@ -1,10 +1,8 @@
 const gameBoard = document.querySelector("#gameBoard");
 const ctx = gameBoard.getContext("2d");
 const CELL_SIZE = 32;
-const BG_COLOR = "#C000D3";
 const SNAKE_COLOR = "#0CC8FF";
 const SNAKE_HEAD_COLOR = "#4200FF";
-const FOOD_COLOR = "#FFFFFF";
 const TEXT_COLOR = "#FFFFFF";
 const TEXT_COLOR_GAME_OVER = "#7A0086";
 const FONT_STYLE_SCORE = "40px VT323";
