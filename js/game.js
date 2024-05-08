@@ -40,7 +40,12 @@ function spawnFood() {
 
 function gameOver() {
     clearInterval(game);
-    // aggiungi il codice per il game over
+    ctx.fillStyle = TEXT_COLOR_GAME_OVER;
+    ctx.font = FONT_STYLE_GAME_OVER;
+    var textWidth = ctx.measureText("Game Over").width;
+    var textX = (gameBoard.width - textWidth) / 2;
+    var textY = gameBoard.height / 2;
+    ctx.fillText("Game Over", textX, textY);
 }
 
 var game = setInterval(draw, 100);
