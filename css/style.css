@@ -32,7 +32,6 @@ nav {
 
 #links li {
     list-style: none;
-    color: #8f00ff;
 }
 
 #links a {
@@ -43,8 +42,10 @@ nav {
     color: #0044d0;
 }
 
-#links a:hover {
+#links a:hover,
+#mainPage:hover {
     text-shadow: 0 0 5px #10ecf9;
+    transition: 0.3s;
 }
 
 #navIcon {
@@ -66,13 +67,9 @@ nav {
 
 #mainPage:hover {
     text-shadow: 0 0 5px #f548ff;
-    transition: 0.3s;
 }
 
-#mainPage:visited {
-    color: #7A0086;
-}
-
+#mainPage:visited,
 #mainPage:active {
     color: #7A0086;
 }
